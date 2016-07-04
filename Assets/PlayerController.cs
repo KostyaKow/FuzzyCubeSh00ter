@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour {
 
    public List<GameObject> enemies;
    public List<GameObject> bullets;
+   //private List<Vector3> bulletAngles;
+   private List<Quaternion> bulletAngles;
 
    private float timeLastBulletShot;
    public int numEnemies;
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour {
       frameCounter = 0;
 
       bullets = new List<GameObject>();
+      bulletAngles = new List<Quaternion>(); //<Vector3>();
       enemies = new List<GameObject>();
 
       initEnemies();
@@ -37,18 +40,8 @@ public class PlayerController : MonoBehaviour {
 
    void Update() {
       destroyOldBullets();
+      processEveryBulletMovement(); //TODO: testing bullets without physics
 
-      frameCounter += 1;
-      frameSinceFire += 1;
-
-      float currJump = 0.0f;
-      if (jumpLeft > 0.0f) {
-         currJump = 0.15f;
-         jumpLeft -= 0.15f;
-      }
-      //else rb1.useGravity = false;
-      Vector3 move_jump = new Vector3(0, currJump, 0);
-      transform.position += move_jump;
 
       //Input.GetMouseButtonDown(0)) //Input.GetButtonDown("Fire1")
       if (Input.GetButton("Fire1") && frameSinceFire > 10) {
@@ -56,7 +49,6 @@ public class PlayerController : MonoBehaviour {
          frameSinceFire = 0;
       }
 
-      //onGUI();
       if (transform.position.y > 2.9f)
          self.AddComponent<Rigidbody>();
       else if (transform.position.y < 1.64f)
@@ -87,9 +79,8 @@ public class PlayerController : MonoBehaviour {
       float moveHoriz = Input.GetAxis("Horizontal");
       float moveVert = -Input.GetAxis("Vertical");
       if (Input.GetKeyDown("space")) jumpLeft += 1.5f;
-      //float currJump = 0.0f;
-      /*
-      if (jumpLeft > 0.0f) {
+      float currJump = 0.0f;
+      /*if (jumpLeft > 0.0f) {
          currJump = 0.05f;
          jumpLeft -= 0.05f;
       }*/
@@ -100,7 +91,6 @@ public class PlayerController : MonoBehaviour {
       //rb.AddForce(move * speed);
       transform.position += move*speed;
       //END FIXED UPDATE
-
 
 	}
 
@@ -116,7 +106,21 @@ public class PlayerController : MonoBehaviour {
       }
    }
 
-	void FixedUpdate() { }
+	void FixedUpdate() {
+      frameCounter += 1;
+      frameSinceFire += 1;
+
+      float currJump = 0.0f;
+      if (jumpLeft > 0.0f) {
+         currJump = 0.15f;
+         jumpLeft -= 0.15f;
+      }
+      //else rb1.useGravity = false;
+      Vector3 move_jump = new Vector3(0, currJump, 0);
+      transform.position += move_jump;
+
+
+    }
 
    void OnBulletCollide(GameObject bullet, Collision col) {
       if (col.gameObject.name != "Ground")
@@ -127,19 +131,51 @@ public class PlayerController : MonoBehaviour {
       if (bullets.Count > 0 && (Mathf.Abs(Time.time - timeLastBulletShot) > bulletLife)) {
          foreach (GameObject b in bullets)
             Destroy(b);
+         /*foreach (var v in bulletAngles)
+            Destroy(v);*/
+         bulletAngles.Clear();
          bullets.Clear();
       }
    }
 
+   void processEveryBulletMovement() {
+      var z = 0;
+      foreach (GameObject b in bullets) {
+         //Vector3 camAngle = bulletAngles[z];
+         Quaternion camAngle = bulletAngles[z];
+
+         /*Vector3 moveBullet = Quaternion.AngleAxis(camAngle.y, Vector3.up) *
+                              Quaternion.AngleAxis(camAngle.z, Vector3.right) *
+                              Quaternion.AngleAxis(camAngle.x, Vector3.forward) *
+                              new Vector3(-1, 0.0f, 0.0f);*/
+         Vector3 moveBullet = camAngle * new Vector3(0.0f, 0.0f, 1.0f);
+
+         //Vector3 moveBullet = Quaternion.AngleAxis(camAngle.y, Vector3.);// *
+                              //new Vector3(1, 0, 0);
+
+         /*moveBullet = Quaternion.AngleAxis(camAngle.z, Vector3.right) *
+                      moveBullet;*/
+         /*moveBullet = Quaternion.AngleAxis(camAngle.x, Vector3.forward) *
+                      moveBullet;*/
+
+
+         //b.transform.position += new Vector3(0, 0, 0.1f);
+         b.transform.position += moveBullet;
+
+         z++;
+      }
+   }
+
    void leftClick() {
+      Transform cam = transform.Find("Main Camera");
+
       timeLastBulletShot = Time.time;
       var bulletObj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
       bullets.Add(bulletObj);
+      bulletAngles.Add(cam.rotation);//eulerAngles);
 
-      Transform cam = transform.Find("Main Camera");
-
-      bulletObj.transform.eulerAngles = new Vector3(0, 90, 90) + cam.eulerAngles;
       bulletObj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+      bulletObj.transform.eulerAngles = new Vector3(0, 90, 90) + cam.eulerAngles;
 
       //Vector3 bulletPos = transform.position;
       Vector3 bulletPos = cam.position;
@@ -162,8 +198,15 @@ public class PlayerController : MonoBehaviour {
       /*bulletSpeedVec = Quaternion.AngleAxis(cam.eulerAngles.y, Vector3.up) * bulletSpeedVec;
       bulletSpeedVec = Quaternion.AngleAxis(cam.eulerAngles.z, Vector3.right) * bulletSpeedVec;*/
 
-      Vector3 bulletSpeedVec = new Vector3(-1, 0, 0) * bulletSpeed;
-      rb.AddForce(bulletSpeedVec);
+      Vector3 bulletSpeedVec = new Vector3(0, 0, 1*bulletSpeed);
+      Debug.Log(" x: " + cam.eulerAngles.x +  "y: " + cam.eulerAngles.y + "z: " + cam.eulerAngles.z);
+
+      bulletSpeedVec = Quaternion.AngleAxis(cam.eulerAngles.y, Vector3.up) * bulletSpeedVec;
+      bulletSpeedVec = Quaternion.AngleAxis(cam.eulerAngles.z, Vector3.right) * bulletSpeedVec;
+      bulletSpeedVec = Quaternion.AngleAxis(-cam.eulerAngles.x, Vector3.forward) * bulletSpeedVec;
+
+      ////PHYSICS BULLETS TESTING
+      //rb.AddForce(bulletSpeedVec); //kk testing without using force but by modifying position manually on Update()
 
       EnemyCollider ec = bulletObj.AddComponent<EnemyCollider>();
       ec.callback = col => {
