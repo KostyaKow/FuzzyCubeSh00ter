@@ -41,6 +41,18 @@ public class PlayerController : MonoBehaviour {
       destroyOldBullets();
       processEveryBulletMovement();
 
+      var camT = transform; //GameObject.Find("Main Camera").transform;
+      var camRot = camT.rotation;
+      /*if (camRot.x > 24) camT.eulerAngles = new Vector3(24, camRot.y, camRot.z);
+      if (camRot.x < 20) camT.eulerAngles = new Vector3(20, camRot.y, camRot.z);*/
+
+      /*if (camRot.z > 370) camRot.z -= 1;
+      if (camRot.y */
+      /*if (frameCounter > 20) {
+         if (camRot.y > 34) camT.eulerAngles = new Vector3(camRot.x, 34, camRot.z);
+         if (camRot.y < 20) camT.eulerAngles = new Vector3(camRot.x, 21, camRot.z);
+      }*/
+
       if (Input.GetButton("Fire1") && frameSinceFire > 10) {
          leftClick();
          frameSinceFire = 0;
@@ -140,7 +152,7 @@ public class PlayerController : MonoBehaviour {
       Rigidbody rb = bulletObj.AddComponent<Rigidbody>();
       rb.useGravity = false;
       Vector3 bulletSpeedVec = new Vector3(0, 0, 1*bulletSpeed);
-      Debug.Log(" x: " + cam.eulerAngles.x +  "y: " + cam.eulerAngles.y + "z: " + cam.eulerAngles.z);
+      //Debug.Log(" x: " + cam.eulerAngles.x +  "y: " + cam.eulerAngles.y + "z: " + cam.eulerAngles.z);
 
       bulletSpeedVec = Quaternion.AngleAxis(cam.eulerAngles.y, Vector3.up) * bulletSpeedVec;
       bulletSpeedVec = Quaternion.AngleAxis(cam.eulerAngles.z, Vector3.right) * bulletSpeedVec;
@@ -154,6 +166,21 @@ public class PlayerController : MonoBehaviour {
          OnBulletCollide(bulletObj, col);
       };
    }
+
+   /*void OnGUI() {
+      if (GUILayout.Button(" Initlized server")) {
+         Network.InitializeServer(32,25001,false);
+         Debug.Log("Server has been Initlized");
+      }
+      if (GUILayout.Button("connect to server")) {
+         Network.Connect("127.0.0.1",25001);
+      }
+   }
+
+   void OnConnectedToServer() {
+      Debug.Log("Connected to server");
+      // Send local player name to server ...
+   }*/
 
 }
 
