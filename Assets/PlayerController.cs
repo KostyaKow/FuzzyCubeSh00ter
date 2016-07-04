@@ -19,6 +19,18 @@ public class PlayerController : NetworkBehaviour {
 
    private float timeLastBulletShot;
    public int numEnemies;
+   private GameObject cam_obj;
+
+   void initCam() {
+      cam_obj = new GameObject();
+      cam_obj.name = "PlayerCam";
+      var cam = cam_obj.AddComponent<Camera>();
+      var camt = cam_obj.transform;
+      camt.eulerAngles = new Vector3(20.0f, 265.1f, 0.0f);
+      camt.position = new Vector3(2.0f, 5.0f, 0.0f);
+      //cam_obj.transform.scale
+      camt.parent = gameObject.transform;
+   }
 
 	// Use this for initialization
 	void Start () {
@@ -30,9 +42,10 @@ public class PlayerController : NetworkBehaviour {
       bulletAngles = new List<Quaternion>();
       enemies = new List<GameObject>();
 
-      initEnemies();
-
       transform.position += new Vector3(0.0f, 4.0f, 0.0f);
+
+      initCam();
+      initEnemies();
 
       //Screen.showCursor = false;
       //UnityEngine.Cursor.visible = false;
@@ -45,12 +58,13 @@ public class PlayerController : NetworkBehaviour {
 
    void Update() {
 
-      GameObject.Find("PlayerCam").GetComponent<Camera>().enabled = false;
+      //GameObject.Find("PlayerCam").GetComponent<Camera>().enabled = false;
+      cam_obj.GetComponent<Camera>().enabled = false;
 
-      //if (!isLocalPlayer)
-      //   return;
+      if (!isLocalPlayer)
+         return;
 
-      GameObject.Find("PlayerCam").GetComponent<Camera>().enabled = true;
+      cam_obj.GetComponent<Camera>().enabled = true; //GameObject.Find("PlayerCam").
 
       destroyOldBullets();
       processEveryBulletMovement();
@@ -151,7 +165,7 @@ public class PlayerController : NetworkBehaviour {
    }
 
    void leftClick() {
-      Transform cam = transform.Find("PlayerCam");
+      Transform cam = cam_obj.transform; //transform.Find("PlayerCam");
 
       timeLastBulletShot = Time.time;
       var bulletObj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
