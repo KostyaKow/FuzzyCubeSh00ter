@@ -30,9 +30,14 @@ public class PlayerController : MonoBehaviour {
 
       initEnemies();
 
+
+      transform.position += new Vector3(0.0f, 20.0f, 0.0f);
+
       //Screen.showCursor = false;
       //UnityEngine.Cursor.visible = false;
       //Screen.lockCursor = true;
+
+      //this works pretty well:
       Cursor.lockState = CursorLockMode.Locked;
       Cursor.visible = false;
 	}
@@ -130,8 +135,9 @@ public class PlayerController : MonoBehaviour {
       var z = 0;
       foreach (GameObject b in bullets) {
          Quaternion camAngle = bulletAngles[z++];
-         Vector3 moveBullet = camAngle * new Vector3(0.0f, 0.0f, 1.0f);
-         b.transform.position += moveBullet;
+         Vector3 moveBullet = camAngle * new Vector3(0.0f, 0.0f, 1.0f); // *bulletSpeed);
+         if (b != null)
+            b.transform.position += moveBullet;
       }
    }
 
