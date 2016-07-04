@@ -49,19 +49,23 @@ public class PlayerController : MonoBehaviour {
       var bulletType = PrimitiveType.Capsule;
       var bulletObj = GameObject.CreatePrimitive(bulletType);
 
-      Vector3 bulletPos = transform.position;
-      bulletPos.z -= 0.28f;
+      Transform cam = transform.Find("Main Camera");
+
+      //Vector3 bulletPos = transform.position;
+      Vector3 bulletPos = cam.position;
+      //bulletPos.z -= 0.28f;
       //bulletPos.y += 0.1f;
       //bulletPos.x += 3.0f;
       bulletObj.transform.position = bulletPos;
 
-      bulletObj.transform.eulerAngles = new Vector3(0, 0, 90) + transform.eulerAngles;
+      bulletObj.transform.eulerAngles = new Vector3(0, 0, 90) + cam.eulerAngles; //+ transform.eulerAngles;
       bulletObj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
 
       Rigidbody rb = bulletObj.AddComponent<Rigidbody>();
-      //rb.useGravity = false;
+      rb.useGravity = false;
       Vector3 bulletSpeedVec = new Vector3(-1.0f*bulletSpeed, 0.0f, 0.0f);
+
       bulletSpeedVec = Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * bulletSpeedVec;
       bulletSpeedVec = Quaternion.AngleAxis(transform.eulerAngles.z, Vector3.right) * bulletSpeedVec;
 
