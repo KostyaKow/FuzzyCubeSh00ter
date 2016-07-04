@@ -27,7 +27,7 @@ public class PlayerController : NetworkBehaviour {
       var cam = cam_obj.AddComponent<Camera>();
       var camt = cam_obj.transform;
       camt.eulerAngles = new Vector3(20.0f, 265.1f, 0.0f);
-      camt.position = new Vector3(2.0f, 5.0f, 0.0f);
+      camt.position = new Vector3(2.0f, 4.5f, -0.5f); //5.0f, 0.0f);
       //cam_obj.transform.scale
       camt.parent = gameObject.transform;
    }
