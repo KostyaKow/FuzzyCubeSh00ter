@@ -20,6 +20,7 @@ public class PlayerController : NetworkBehaviour {
    private float timeLastBulletShot;
    public int numEnemies;
    private GameObject cam_obj;
+   private Vector3 movePhysics;
 
    void initCam() {
       cam_obj = new GameObject();
@@ -34,6 +35,7 @@ public class PlayerController : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
+      movePhysics = new Vector3(0.0f, 0.0f, 0.0f);
       timeLastBulletShot = 0;
       frameCounter = 0;
 
@@ -105,9 +107,11 @@ public class PlayerController : NetworkBehaviour {
       Vector3 move = new Vector3(moveVert, currJump, moveHoriz);
       move = Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * move;
 
-      //rb.AddForce(move * speed);
-      transform.position += move*speed;
+      /*var rb = GetComponent<Rigidbody>();
+      rb.AddForce(move * speed);
+      transform.position += move*speed;*/
 
+      movePhysics = move;
       //END FIXED UPDATE
 	}
 
@@ -126,6 +130,9 @@ public class PlayerController : NetworkBehaviour {
 	void FixedUpdate() {
       if (!isLocalPlayer)
          return;
+
+      var rb = GetComponent<Rigidbody>();
+      rb.AddForce(movePhysics*1000);
 
       frameCounter += 1;
       frameSinceFire += 1;
