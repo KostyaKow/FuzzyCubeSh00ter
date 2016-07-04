@@ -6,7 +6,6 @@ public class EnemyMnMEminemAI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
       name = "enemy";
-
       gameObject.AddComponent<Rigidbody>();
 	}
 
