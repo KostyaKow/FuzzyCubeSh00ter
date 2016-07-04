@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : NetworkBehaviour {
    public GameObject self;
    public float speed;
    public float bulletLife;
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour {
    public float frameCounter;
    public float frameSinceFire;
 
+   public List<GameObject> cams;
    public List<GameObject> enemies;
    public List<GameObject> bullets;
    private List<Quaternion> bulletAngles;
@@ -20,18 +22,17 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
       timeLastBulletShot = 0;
       frameCounter = 0;
 
+      cams = new List<GameObject>();
       bullets = new List<GameObject>();
       bulletAngles = new List<Quaternion>();
       enemies = new List<GameObject>();
 
       initEnemies();
 
-
-      transform.position += new Vector3(0.0f, 20.0f, 0.0f);
+      transform.position += new Vector3(0.0f, 4.0f, 0.0f);
 
       //Screen.showCursor = false;
       //UnityEngine.Cursor.visible = false;
@@ -43,6 +44,14 @@ public class PlayerController : MonoBehaviour {
 	}
 
    void Update() {
+
+      GameObject.Find("PlayerCam").GetComponent<Camera>().enabled = false;
+
+      //if (!isLocalPlayer)
+      //   return;
+
+      GameObject.Find("PlayerCam").GetComponent<Camera>().enabled = true;
+
       destroyOldBullets();
       processEveryBulletMovement();
 
@@ -63,10 +72,10 @@ public class PlayerController : MonoBehaviour {
          frameSinceFire = 0;
       }
 
-      if (transform.position.y > 2.9f)
+      /*if (transform.position.y > 2.9f)
          self.AddComponent<Rigidbody>();
       else if (transform.position.y < 1.64f)
-         Destroy(self.GetComponent<Rigidbody>());
+         Destroy(self.GetComponent<Rigidbody>());*/
 
       float lookUp = -Input.GetAxis("Mouse Y");
       float lookAround = Input.GetAxis("Mouse X")*1.0f;
@@ -86,7 +95,6 @@ public class PlayerController : MonoBehaviour {
       transform.position += move*speed;
 
       //END FIXED UPDATE
-
 	}
 
    void initEnemies() {
@@ -102,6 +110,9 @@ public class PlayerController : MonoBehaviour {
    }
 
 	void FixedUpdate() {
+      if (!isLocalPlayer)
+         return;
+
       frameCounter += 1;
       frameSinceFire += 1;
 
@@ -113,8 +124,6 @@ public class PlayerController : MonoBehaviour {
       //else rb1.useGravity = false;
       Vector3 move_jump = new Vector3(0, currJump, 0);
       transform.position += move_jump;
-
-
     }
 
    void OnBulletCollide(GameObject bullet, Collision col) {
@@ -142,7 +151,7 @@ public class PlayerController : MonoBehaviour {
    }
 
    void leftClick() {
-      Transform cam = transform.Find("Main Camera");
+      Transform cam = transform.Find("PlayerCam");
 
       timeLastBulletShot = Time.time;
       var bulletObj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
