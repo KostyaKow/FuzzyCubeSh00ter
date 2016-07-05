@@ -108,8 +108,8 @@ public class PlayerController : NetworkBehaviour {
       move = Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * move;
 
       /*var rb = GetComponent<Rigidbody>();
-      rb.AddForce(move * speed);
-      transform.position += move*speed;*/
+      rb.AddForce(move * speed);*/
+      transform.position += move*speed;
 
       movePhysics = move;
       //END FIXED UPDATE
@@ -131,8 +131,9 @@ public class PlayerController : NetworkBehaviour {
       if (!isLocalPlayer)
          return;
 
-      var rb = GetComponent<Rigidbody>();
-      rb.AddForce(movePhysics*1000);
+      //kk tmp physics based movement:
+      //var rb = GetComponent<Rigidbody>();
+      //rb.AddForce(movePhysics*1000);
 
       frameCounter += 1;
       frameSinceFire += 1;
