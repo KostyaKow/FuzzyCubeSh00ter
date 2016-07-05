@@ -8,7 +8,7 @@ public class PlayerController : NetworkBehaviour {
    public float speed;
    public float bulletLife;
    public float jumpLeft;
-   public float bulletSpeed; //100-300 = slow. 1000=fast, 5000=almost cs speed
+   public float bulletSpeed; //default 300 //100-300 = slow. 1000=fast, 5000=almost cs speed
    public float frameCounter;
    public float frameSinceFire;
 
