@@ -1,4 +1,4 @@
-
+Castle was created by, and is intellectual property of (Felipe)[https://github.com/forellana-digithinkit]
 
 TODO:
    - [ ] good bullet path and crosshair
