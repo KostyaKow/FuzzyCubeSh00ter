@@ -4,7 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerController : NetworkBehaviour {
-   public GameObject self;
+   //public GameObject self;
+   public bool hideCursor;
    public float speed;
    public float bulletLife;
    public float jumpLeft;
@@ -34,7 +35,11 @@ public class PlayerController : NetworkBehaviour {
    }
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
+      //transform.position = new Vector3(0.0f, 0.0f, 0.0f);
+      //if (!isLocalPlayer) return;
+
+
       movePhysics = new Vector3(0.0f, 0.0f, 0.0f);
       timeLastBulletShot = 0;
       frameCounter = 0;
@@ -49,22 +54,23 @@ public class PlayerController : NetworkBehaviour {
       initCam();
       initEnemies();
 
-      //Screen.showCursor = false;
-      //UnityEngine.Cursor.visible = false;
-      //Screen.lockCursor = true;
 
-      //this works pretty well:
-      Cursor.lockState = CursorLockMode.Locked;
-      Cursor.visible = false;
+      if (hideCursor) {
+         //Screen.showCursor = false;
+         //UnityEngine.Cursor.visible = false;
+         //Screen.lockCursor = true;
+
+         //this works pretty well:
+         Cursor.lockState = CursorLockMode.Locked;
+         Cursor.visible = false;
+      }
 	}
 
    void Update() {
-
       //GameObject.Find("PlayerCam").GetComponent<Camera>().enabled = false;
       cam_obj.GetComponent<Camera>().enabled = false;
 
-      if (!isLocalPlayer)
-         return;
+      if (!isLocalPlayer) return;
 
       cam_obj.GetComponent<Camera>().enabled = true; //GameObject.Find("PlayerCam").
 
@@ -128,8 +134,7 @@ public class PlayerController : NetworkBehaviour {
    }
 
 	void FixedUpdate() {
-      if (!isLocalPlayer)
-         return;
+      if (!isLocalPlayer) return;
 
       //kk tmp physics based movement:
       //var rb = GetComponent<Rigidbody>();
