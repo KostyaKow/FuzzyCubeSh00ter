@@ -39,7 +39,6 @@ public class PlayerController : NetworkBehaviour {
       //transform.position = new Vector3(0.0f, 0.0f, 0.0f);
       //if (!isLocalPlayer) return;
 
-
       movePhysics = new Vector3(0.0f, 0.0f, 0.0f);
       timeLastBulletShot = 0;
       frameCounter = 0;
@@ -134,7 +133,7 @@ public class PlayerController : NetworkBehaviour {
    }
 
 	void FixedUpdate() {
-      if (!isLocalPlayer) return;
+      //if (!isLocalPlayer) return;
 
       //kk tmp physics based movement:
       var rb = GetComponent<Rigidbody>();
