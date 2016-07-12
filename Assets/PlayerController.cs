@@ -49,7 +49,7 @@ public class PlayerController : NetworkBehaviour {
       bulletAngles = new List<Quaternion>();
       enemies = new List<GameObject>();
 
-      transform.position += new Vector3(0.0f, 4.0f, 0.0f);
+      transform.position += new Vector3(0.0f, 4.0f, 0.0f); //y = 4
 
       initCam();
       initEnemies();
@@ -137,7 +137,7 @@ public class PlayerController : NetworkBehaviour {
       if (!isLocalPlayer) return;
 
       //kk tmp physics based movement:
-      //var rb = GetComponent<Rigidbody>();
+      var rb = GetComponent<Rigidbody>();
       //rb.AddForce(movePhysics*1000);
 
       frameCounter += 1;
@@ -147,11 +147,13 @@ public class PlayerController : NetworkBehaviour {
       if (jumpLeft > 0.0f) {
          currJump = 0.15f;
          jumpLeft -= 0.15f;
+      } else if (transform.position.y > 0.5) {
+         currJump = -0.15f;
       }
-      //else rb1.useGravity = false;
+      //else rb.useGravity = false;
       Vector3 move_jump = new Vector3(0, currJump, 0);
       transform.position += move_jump;
-    }
+   }
 
    void OnBulletCollide(GameObject bullet, Collision col) {
       if (col.gameObject.name != "Ground")
