@@ -22,6 +22,7 @@ public class PlayerController : NetworkBehaviour {
    public int numEnemies;
    private GameObject cam_obj;
    private Vector3 movePhysics;
+   public GameObject ennn;
 
    void initCam() {
       cam_obj = new GameObject();
@@ -125,9 +126,14 @@ public class PlayerController : NetworkBehaviour {
          float x = Random.Range(-100, 100);
          float z = Random.Range(-100, 100);
 
-         var enemy = GameObject.CreatePrimitive(PrimitiveType.Cube);
+         //var enemy = GameObject.CreatePrimitive(PrimitiveType.Cube);
+         GameObject enemy = Instantiate(ennn);
+         enemy.transform.localScale += new Vector3(2.0f, 1.9f, 2.0f);
          enemy.AddComponent<EnemyMnMEminemAI>();
-         enemy.transform.position = new Vector3(x, 1.27f, z);
+         enemy.transform.position = new Vector3(x, 1.4f, z);
+         enemy.GetComponent<Animation>().Play();
+
+         //enemy.transform.position = new Vector3(x, 1.27f, z);
          enemies.Add(enemy);
       }
    }
