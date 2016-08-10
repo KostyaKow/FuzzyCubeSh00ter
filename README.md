@@ -1,5 +1,3 @@
-Castle was created by, and is intellectual property of [Felipe Orellana](https://github.com/forellana-digithinkit)
-
 TODO:
    - [ ] good bullet path and crosshair
    - [ ] multiplayer
@@ -17,3 +15,4 @@ tree README:
       http://blender.stackexchange.com/questions/2917/how-can-curves-be-converted-to-meshes
    https://wiki.blender.org/index.php/Extensions:2.6/Py/Scripts/Curve/Sapling_Tree
 
+The castle asset was created by, and is intellectual property of [Felipe Orellana](https://github.com/forellana-digithinkit)
