@@ -34,8 +34,8 @@ public class PlayerController : NetworkBehaviour {
       camt.parent = gameObject.transform;
    }
 
-	// Use this for initialization
-	void Start() {
+	 // Use this for initialization
+   void Start() {
       //transform.position = new Vector3(0.0f, 0.0f, 0.0f);
       //if (!isLocalPlayer) return;
 
@@ -63,7 +63,7 @@ public class PlayerController : NetworkBehaviour {
          Cursor.lockState = CursorLockMode.Locked;
          Cursor.visible = false;
       }
-	}
+   }
 
    void Update() {
       //GameObject.Find("PlayerCam").GetComponent<Camera>().enabled = false;
@@ -78,15 +78,9 @@ public class PlayerController : NetworkBehaviour {
 
       var camT = transform; //GameObject.Find("Main Camera").transform;
       var camRot = camT.rotation;
+     
       /*if (camRot.x > 24) camT.eulerAngles = new Vector3(24, camRot.y, camRot.z);
       if (camRot.x < 20) camT.eulerAngles = new Vector3(20, camRot.y, camRot.z);*/
-
-      /*if (camRot.z > 370) camRot.z -= 1;
-      if (camRot.y */
-      /*if (frameCounter > 20) {
-         if (camRot.y > 34) camT.eulerAngles = new Vector3(camRot.x, 34, camRot.z);
-         if (camRot.y < 20) camT.eulerAngles = new Vector3(camRot.x, 21, camRot.z);
-      }*/
 
       if (Input.GetButton("Fire1") && frameSinceFire > 10) {
          leftClick();
